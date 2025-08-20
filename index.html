@@ -10,6 +10,11 @@
 </head>
 <body>
 
+    <!-- Custom Cursor -->
+    <div class="custom-cursor">
+        <div class="cursor-star"></div>
+    </div>
+
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
@@ -24,6 +29,42 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Custom cursor functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const cursor = document.querySelector('.custom-cursor');
+            let mouseX = 0;
+            let mouseY = 0;
+
+            // Update mouse position
+            document.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Direct cursor movement
+            function updateCursor() {
+                cursor.style.left = (mouseX - 30) + 'px';
+                cursor.style.top = (mouseY - 30) + 'px';
+                
+                requestAnimationFrame(updateCursor);
+            }
+            
+            updateCursor();
+
+
+
+            // Hide cursor when leaving window
+            document.addEventListener('mouseleave', function() {
+                cursor.style.opacity = '0';
+            });
+            
+            document.addEventListener('mouseenter', function() {
+                cursor.style.opacity = '1';
+            });
+        });
+    </script>
 
 </body>
 </html>

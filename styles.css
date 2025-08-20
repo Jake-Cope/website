@@ -35,6 +35,11 @@
     /* SVG Colors */
     --color-svg-shadow: rgba(0, 0, 0, 0.1);
     --color-svg-shadow-hover: rgba(0, 0, 0, 0.15);
+    
+    /* Custom Cursor Colors */
+    --cursor-star-color: #FFD700;
+    --cursor-star-glow: #FFA500;
+    --cursor-star-shadow: rgba(255, 215, 0, 0.6);
 }
 
 /* Reset and Base Styles */
@@ -49,6 +54,7 @@ body {
     line-height: 1.6;
     color: var(--color-text-primary);
     position: relative;
+    cursor: none; /* Hide the default cursor */
 }
 
 body::before {
@@ -82,6 +88,7 @@ body::before {
     overflow: hidden;
     background: transparent;
     color: var(--color-text-secondary);
+    cursor: none;
 }
 
 .btn::before {
@@ -158,6 +165,7 @@ body::before {
     height: 600px;
     filter: drop-shadow(0 4px 8px var(--color-svg-shadow));
     transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: none;
 }
 
 .hero-svg:hover {
@@ -217,4 +225,68 @@ body::before {
         width: 300px;
         height: 300px;
     }
+}
+
+/* Custom Cursor Effect */
+.custom-cursor {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: normal;
+}
+
+.cursor-star {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+
+.cursor-star::before {
+    content: '★';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: var(--cursor-star-color);
+    text-shadow: 
+        2px 2px 0px #000,
+        -2px -2px 0px #000,
+        2px -2px 0px #000,
+        -2px 2px 0px #000;
+    animation: starWiggle 3s ease-in-out infinite;
+}
+
+
+
+/* Animations */
+@keyframes starWiggle {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) rotate(5deg) scale(1.1);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(-3deg) scale(0.95);
+    }
+    75% {
+        transform: translate(-50%, -50%) rotate(3deg) scale(1.05);
+    }
+}
+
+/* Hover effects for interactive elements */
+.btn:hover ~ .custom-cursor .cursor-star::before {
+    transform: translate(-50%, -50%) scale(1.2);
+    color: #FFA500;
+}
+
+.hero-svg:hover ~ .custom-cursor .cursor-star::before {
+    transform: translate(-50%, -50%) scale(1.3);
+    color: #FF8C00;
 }
