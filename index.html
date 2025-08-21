@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jake Cope - Creative Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -26,7 +26,8 @@
                 </div>
                 <p class="hero-subtitle">Creative & Graphic Designer</p>
                 <div class="hero-buttons">
-                    <a href="files/cv.pdf" target="_blank" class="btn btn-primary">download cv</a>
+                    <a href="files/portfolio.pdf" target="_blank" class="btn btn-primary">portfolio</a>
+                    <a href="files/cv.pdf" target="_blank" class="btn btn-primary">cv</a>
                     <a href="mailto:j_a_cope@hotmail.com" class="btn btn-primary">get in touch</a>
                 </div>
             </div>
@@ -91,6 +92,27 @@
                 clearInterval(cycleInterval);
                 
                 // Keep the current SVG visible - don't reset to first one
+            });
+
+            // Touch events for mobile devices
+            heroIcon.addEventListener('touchstart', function() {
+                isHovering = true;
+                cycleInterval = setInterval(function() {
+                    // Hide current SVG
+                    svgImages[currentSvgIndex].style.display = 'none';
+                    
+                    // Move to next SVG
+                    currentSvgIndex = (currentSvgIndex + 1) % svgImages.length;
+                    
+                    // Show next SVG
+                    svgImages[currentSvgIndex].style.display = 'block';
+                }, 200); // Change every 200ms
+            });
+
+            // Stop cycling on touch end
+            heroIcon.addEventListener('touchend', function() {
+                isHovering = false;
+                clearInterval(cycleInterval);
             });
         });
     </script>

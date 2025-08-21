@@ -77,35 +77,17 @@ body::before {
 /* Buttons */
 .btn {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 2px;
+    padding: 0.5rem 1rem;
     text-decoration: none;
     font-weight: 400;
-    transition: all 0.3s ease;
-    border: 1px solid var(--color-border-primary);
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
+    border: none;
     background: transparent;
     color: var(--color-text-secondary);
     cursor: none;
+    position: relative;
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--color-button-hover);
-    transition: left 0.3s ease;
-    z-index: -1;
-}
 
-.btn:hover::before {
-    left: 0;
-}
 
 .btn-primary {
     background: transparent;
@@ -115,7 +97,21 @@ body::before {
 
 .btn-primary:hover {
     color: var(--color-text-primary);
-    transform: translateY(-2px);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-text-primary);
+    transition: width 0.3s ease;
+}
+
+.btn:hover::after {
+    width: 100%;
 }
 
 /* Hero Section */
@@ -218,12 +214,56 @@ body::before {
     .container {
         padding: 0 15px;
     }
+    
+    .hero-svg {
+        width: 400px;
+        height: 400px;
+    }
+    
+    .hero-subtitle {
+        margin-top: 60px;
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 480px) {
     .hero-svg {
-        width: 300px;
-        height: 300px;
+        width: 280px;
+        height: 280px;
+    }
+    
+    .hero-subtitle {
+        margin-top: 40px;
+        font-size: 1rem;
+    }
+    
+    .container {
+        padding: 0 10px;
+    }
+    
+    .hero-buttons {
+        gap: 0.75rem;
+    }
+    
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-svg {
+        width: 240px;
+        height: 240px;
+    }
+    
+    .hero-subtitle {
+        margin-top: 30px;
+        font-size: 0.9rem;
+    }
+    
+    .container {
+        padding: 0 8px;
     }
 }
 
@@ -267,6 +307,17 @@ body::before {
         2px -2px 0px #000,
         -2px 2px 0px #000;
 
+}
+
+/* Hide custom cursor on mobile devices */
+@media (max-width: 768px) {
+    .custom-cursor {
+        display: none;
+    }
+    
+    body {
+        cursor: auto; /* Restore default cursor on mobile */
+    }
 }
 
 /* Hover effects for interactive elements */
