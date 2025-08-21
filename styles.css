@@ -162,7 +162,7 @@ body::before {
 
 .hero-svg {
     width: 600px;
-    height: 600px;
+    height: 100%;
     filter: drop-shadow(0 4px 8px var(--color-svg-shadow));
     transition: transform 0.3s ease, filter 0.3s ease;
     cursor: none;
@@ -174,6 +174,7 @@ body::before {
 
 .hero-subtitle {
     font-size: 1.25rem;
+    margin-top: 100px;
     margin-bottom: 2rem;
     opacity: 0;
     animation: gentleFadeIn 1s ease 0.5s forwards;
@@ -246,7 +247,14 @@ body::before {
 }
 
 .cursor-star::before {
-    content: '★';
+    content: '';
+    background-image: url('cursor.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 70%;
+    height: 70%;
+    display: block;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -258,25 +266,7 @@ body::before {
         -2px -2px 0px #000,
         2px -2px 0px #000,
         -2px 2px 0px #000;
-    animation: starWiggle 3s ease-in-out infinite;
-}
 
-
-
-/* Animations */
-@keyframes starWiggle {
-    0%, 100% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    }
-    25% {
-        transform: translate(-50%, -50%) rotate(5deg) scale(1.1);
-    }
-    50% {
-        transform: translate(-50%, -50%) rotate(-3deg) scale(0.95);
-    }
-    75% {
-        transform: translate(-50%, -50%) rotate(3deg) scale(1.05);
-    }
 }
 
 /* Hover effects for interactive elements */
