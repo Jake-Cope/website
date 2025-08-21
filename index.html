@@ -19,7 +19,10 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-icon">
-                    <img src="hero-icon.svg" alt="Creative Portfolio Icon" class="hero-svg">
+                    <img src="hero-icon.svg" alt="Creative Portfolio Icon" class="hero-svg" data-svg="0">
+                    <img src="hero-icon-2.svg" alt="Creative Portfolio Icon" class="hero-svg" data-svg="1" style="display: none;">
+                    <img src="hero-icon-3.svg" alt="Creative Portfolio Icon" class="hero-svg" data-svg="2" style="display: none;">
+                    <img src="hero-icon-4.svg" alt="Creative Portfolio Icon" class="hero-svg" data-svg="3" style="display: none;">
                 </div>
                 <p class="hero-subtitle">Creative & Graphic Designer</p>
                 <div class="hero-buttons">
@@ -53,8 +56,6 @@
             
             updateCursor();
 
-
-
             // Hide cursor when leaving window
             document.addEventListener('mouseleave', function() {
                 cursor.style.opacity = '0';
@@ -62,6 +63,40 @@
             
             document.addEventListener('mouseenter', function() {
                 cursor.style.opacity = '1';
+            });
+
+            // SVG cycling functionality
+            const heroIcon = document.querySelector('.hero-icon');
+            const svgImages = document.querySelectorAll('.hero-svg');
+            let currentSvgIndex = 0;
+            let cycleInterval;
+            let isHovering = false;
+
+            // Start cycling on hover
+            heroIcon.addEventListener('mouseenter', function() {
+                isHovering = true;
+                cycleInterval = setInterval(function() {
+                    // Hide current SVG
+                    svgImages[currentSvgIndex].style.display = 'none';
+                    
+                    // Move to next SVG
+                    currentSvgIndex = (currentSvgIndex + 1) % svgImages.length;
+                    
+                    // Show next SVG
+                    svgImages[currentSvgIndex].style.display = 'block';
+                }, 200); // Change every 200ms
+            });
+
+            // Stop cycling when not hovering
+            heroIcon.addEventListener('mouseleave', function() {
+                isHovering = false;
+                clearInterval(cycleInterval);
+                
+                // Reset to first SVG when not hovering
+                svgImages.forEach((svg, index) => {
+                    svg.style.display = index === 0 ? 'block' : 'none';
+                });
+                currentSvgIndex = 0;
             });
         });
     </script>
