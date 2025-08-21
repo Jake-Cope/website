@@ -92,11 +92,7 @@
                 isHovering = false;
                 clearInterval(cycleInterval);
                 
-                // Reset to first SVG when not hovering
-                svgImages.forEach((svg, index) => {
-                    svg.style.display = index === 0 ? 'block' : 'none';
-                });
-                currentSvgIndex = 0;
+                // Keep the current SVG visible - don't reset to first one
             });
         });
     </script>
