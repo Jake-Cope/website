@@ -45,7 +45,6 @@
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             });
-
             // Direct cursor movement
             function updateCursor() {
                 cursor.style.left = (mouseX - 30) + 'px';
@@ -53,7 +52,6 @@
                 
                 requestAnimationFrame(updateCursor);
             }
-            
             updateCursor();
 
             // Hide cursor when leaving window
