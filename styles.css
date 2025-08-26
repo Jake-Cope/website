@@ -87,7 +87,7 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease 0.5s forwards;
     color: var(--color-text-secondary);
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.5px;
 }
 
