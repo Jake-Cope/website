@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Tasks - Jake Cope</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="daily-tasks.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="custom-cursor">
+        <div class="cursor-star"></div>
+    </div>
+
+    <nav class="nav-back">
+        <a href="index.html" class="btn btn-back">← Back to Portfolio</a>
+    </nav>
+
+    <section class="daily-tasks">
+        <div class="container">
+            <div class="tasks-content">
+                <h1 class="tasks-title">Daily Tasks</h1>
+                <p class="tasks-subtitle">Click the buttons to reveal today's tasks</p>
+                
+                <div class="tasks-grid" id="tasksGrid">
+                    <!-- Task buttons will be generated here -->
+                </div>
+
+                <div class="date-info">
+                    <p>Tasks for: <span id="currentDate"></span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // List of all possible tasks
+        const allTasks = [
+            // Basic life tasks
+            "Have a shower",
+            "Make breakfast",
+            "Drink 8 glasses of water",
+            "Take a 10-minute walk",
+            "Call a friend or family member",
+            "Do some stretching exercises",
+            "Make your bed",
+            "Clean your workspace",
+            "Take out the trash",
+            "Do laundry",
+            "Cook a meal from scratch",
+            "Read for 15 minutes",
+            "Listen to music",
+            "Practice deep breathing",
+            "Organize your desk",
+            
+            // Professional/Generic tasks
+            "Update your CV",
+            "Check your emails",
+            "Review your calendar",
+            "Plan tomorrow's tasks",
+            "Backup important files",
+            "Update your portfolio",
+            "Research industry trends",
+            "Network with colleagues",
+            "Learn a new skill",
+            "Review your goals",
+            "Organize your files",
+            "Update your LinkedIn",
+            "Practice public speaking",
+            "Write in a journal",
+            "Set up a meeting"
+        ];
+
+        // Function to generate a daily seed based on the current date
+        function getDailySeed() {
+            const today = new Date();
+            const dateString = today.toDateString();
+            let hash = 0;
+            for (let i = 0; i < dateString.length; i++) {
+                const char = dateString.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32-bit integer
+            }
+            return Math.abs(hash);
+        }
+
+        // Function to shuffle array using Fisher-Yates algorithm with seed
+        function seededShuffle(array, seed) {
+            const shuffled = [...array];
+            let currentSeed = seed;
+            
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                currentSeed = (currentSeed * 9301 + 49297) % 233280;
+                const j = currentSeed % (i + 1);
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            return shuffled;
+        }
+
+        // Function to get today's tasks
+        function getTodaysTasks() {
+            const seed = getDailySeed();
+            const shuffled = seededShuffle(allTasks, seed);
+            return shuffled.slice(0, 6);
+        }
+
+        // Function to create task buttons
+        function createTaskButtons() {
+            const tasksGrid = document.getElementById('tasksGrid');
+            const todaysTasks = getTodaysTasks();
+            
+            tasksGrid.innerHTML = '';
+            
+            todaysTasks.forEach((task, index) => {
+                const button = document.createElement('button');
+                button.className = 'task-button';
+                button.innerHTML = `
+                    <span class="button-number">${index + 1}</span>
+                    <span class="button-text">Click to reveal</span>
+                `;
+                
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('revealed')) {
+                        return; // Already revealed
+                    }
+                    
+                    this.classList.add('revealed');
+                    this.innerHTML = `
+                        <span class="task-text">${task}</span>
+                    `;
+                });
+            
+                tasksGrid.appendChild(button);
+            });
+        }
+
+        // Function to update current date display
+        function updateDateDisplay() {
+            const dateElement = document.getElementById('currentDate');
+            const today = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            dateElement.textContent = today.toLocaleDateString('en-US', options);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            createTaskButtons();
+            updateDateDisplay();
+            
+            // Custom cursor functionality (same as main page)
+            const cursor = document.querySelector('.custom-cursor');
+            let mouseX = 0;
+            let mouseY = 0;
+
+            document.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function updateCursor() {
+                cursor.style.left = (mouseX - 30) + 'px';
+                cursor.style.top = (mouseY - 30) + 'px';
+                requestAnimationFrame(updateCursor);
+            }
+            updateCursor();
+
+            document.addEventListener('mouseleave', function() {
+                cursor.style.opacity = '0';
+            });
+            
+            document.addEventListener('mouseenter', function() {
+                cursor.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>
