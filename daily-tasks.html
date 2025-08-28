@@ -34,88 +34,10 @@
         </div>
     </section>
 
+    <script src="tasks-data.js"></script>
     <script>
-        // List of all possible tasks
-        const allTasks = [
-            // Basic life tasks
-            "Job-Hunting / Career: Look at one job listing and note one skill you already have",
-            "Job-Hunting / Career: Make a list of three companies that interest you",
-            "Job-Hunting / Career: Open your CV and update one section",
-            "Job-Hunting / Career: Draft one sentence for a cover letter",
-            "Job-Hunting / Career: Send one networking message or email",
-            "Job-Hunting / Career: Do one small creative or joyful thing (draw, skate, music, short story)",
-            "Job-Hunting / Career: Research one new skill that could help your career",
-            "Job-Hunting / Career: Update your LinkedIn headline or profile section",
-            "Job-Hunting / Career: Save 3 job listings to review later",
-            "Job-Hunting / Career: Write down one professional goal for the week",
-            "Job-Hunting / Career: Reflect on a past achievement and write it down",
-            "Job-Hunting / Career: Reach out to one contact in your network for advice",
-
-            "Skateboarding: Warm up for five minutes (stretch or roll)",
-            "Skateboarding: Practice one small skateboarding trick or variation",
-            "Skateboarding: Watch one tutorial or video",
-            "Skateboarding: Film one attempt to review later",
-            "Skateboarding: Do foot placement drills for ten minutes",
-            "Skateboarding: Do a fun, playful trick — no pressure, just enjoyment",
-            "Skateboarding: Work on ollie timing for five minutes",
-            "Skateboarding: Practice balance on your board while stationary",
-            "Skateboarding: Try one small variation of a trick you already know",
-            "Skateboarding: Review past video footage for improvements",
-            "Skateboarding: Do a short rolling warm-up around your spot",
-            "Skateboarding: Visualize landing a trick before attempting it",
-
-            "Fitness & Health: Do 10–15 minutes of bodyweight exercise",
-            "Fitness & Health: Go for a 15–20 minute walk or jog",
-            "Fitness & Health: Do stretch or mobility exercises for 10 minutes",
-            "Fitness & Health: Prepare one healthy meal or snack",
-            "Fitness & Health: Drink two to three glasses of water",
-            "Fitness & Health: Do meditation, extra rest, or another restorative activity",
-            "Fitness & Health: Practice deep breathing for five minutes",
-            "Fitness & Health: Track one aspect of your fitness progress",
-            "Fitness & Health: Try a new mobility exercise",
-            "Fitness & Health: Plan your meals for the next day",
-            "Fitness & Health: Spend 5 minutes on posture exercises",
-            "Fitness & Health: Take a short break and move every hour",
-
-            "Be a Better Partner: Send a thoughtful message or compliment to your partner",
-            "Be a Better Partner: Do one small act of service for your partner (make a drink, tidy, help with a task)",
-            "Be a Better Partner: Spend 10 minutes of quality time without distractions",
-            "Be a Better Partner: Plan one small shared activity (walk, game, movie)",
-            "Be a Better Partner: Reflect on one thing you appreciate about your partner",
-            "Be a Better Partner: Do something playful or silly together (joke, mini game, dance, or surprise)",
-            "Be a Better Partner: Ask your partner about their day and listen attentively",
-            "Be a Better Partner: Share one memory or story that makes you laugh together",
-            "Be a Better Partner: Leave a small note or message of appreciation",
-            "Be a Better Partner: Cook or prepare a small snack together",
-            "Be a Better Partner: Suggest one mini-project or creative activity together",
-            "Be a Better Partner: Give a genuine compliment or encouragement",
-
-            "Calisthenics: Hang from a bar for 10 seconds (dead hang)",
-            "Calisthenics: Do 5 incline push-ups (hands on a table or counter)",
-            "Calisthenics: Hold a knee plank for 10–15 seconds",
-            "Calisthenics: Do 8 glute bridges lying on your back",
-            "Calisthenics: Perform 5 negative pull-ups (jump up, lower slowly)",
-            "Calisthenics: Do 10 bodyweight squats",
-            "Calisthenics: Hold a side plank for 10 seconds per side",
-            "Calisthenics: Do 5 assisted dips on a chair",
-            "Calisthenics: Perform 10 mountain climbers",
-            "Calisthenics: Do 5 pike push-ups",
-            "Calisthenics: Perform 5 hollow body holds (tucked)",
-            "Calisthenics: Stretch shoulders and wrists for 5 minutes",
-
-            "Warhammer: Pick one unit and read its full profile/stats",
-            "Warhammer: Paint one base or small detail on a miniature",
-            "Warhammer: Organize miniatures for storage or painting",
-            "Warhammer: Research one army tactic or strategy online",
-            "Warhammer: Assemble one piece of a miniature kit",
-            "Warhammer: Plan your next small hobby goal (painting, converting, or collecting)",
-            "Warhammer: Apply a wash or layer on one miniature",
-            "Warhammer: Review a past painted miniature and plan improvements",
-            "Warhammer: Take photos of your progress for reference",
-            "Warhammer: Watch one tutorial on painting or modeling",
-            "Warhammer: Sketch one custom design for a miniature",
-            "Warhammer: Clean brushes or workspace after painting session"
-        ];
+        // Variable to hold all tasks
+        let allTasks = [];
 
         // Function to generate a daily seed based on the current date
         function getDailySeed() {
@@ -151,32 +73,211 @@
             return shuffled.slice(0, 6);
         }
 
+                // Function to get storage key for today's date
+        function getStorageKey() {
+            const today = new Date();
+            return `dailyTasks_${today.toDateString()}`;
+        }
+
+        // Function to save task state to local storage
+        function saveTaskState(revealedIndices, disabledIndices, completedIndices = []) {
+            const storageKey = getStorageKey();
+            const state = {
+                revealed: revealedIndices,
+                disabled: disabledIndices,
+                completed: completedIndices,
+                date: new Date().toDateString()
+            };
+            localStorage.setItem(storageKey, JSON.stringify(state));
+        }
+
+        // Function to clean up old localStorage entries
+        function cleanupOldStorage() {
+            const today = new Date().toDateString();
+            const keysToRemove = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('dailyTasks_')) {
+                    try {
+                        const saved = localStorage.getItem(key);
+                        if (saved) {
+                            const state = JSON.parse(saved);
+                            if (state.date && state.date !== today) {
+                                keysToRemove.push(key);
+                            }
+                        }
+                    } catch (e) {
+                        // If JSON parsing fails, remove the corrupted entry
+                        keysToRemove.push(key);
+                    }
+                }
+            }
+            
+            // Remove old entries
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                console.log('Cleaned up old storage entry:', key);
+            });
+        }
+
+        // Function to load task state from local storage
+        function loadTaskState() {
+            const storageKey = getStorageKey();
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                try {
+                    const state = JSON.parse(saved);
+                    const today = new Date().toDateString();
+                    
+                    // Check if the saved state is from today
+                    if (state.date === today) {
+                        console.log('Loading saved state for today:', state);
+                        return state;
+                    } else {
+                        console.log('Saved state is from different day, resetting');
+                        // Remove old entry
+                        localStorage.removeItem(storageKey);
+                    }
+                } catch (e) {
+                    console.error('Error parsing saved state:', e);
+                    localStorage.removeItem(storageKey);
+                }
+            }
+            
+            console.log('Starting fresh state for today');
+            return { revealed: [], disabled: [], completed: [] };
+        }
+
         // Function to create task buttons
         function createTaskButtons() {
             const tasksGrid = document.getElementById('tasksGrid');
             const todaysTasks = getTodaysTasks();
+            const maxRevealed = 3;
+            
+            // Load saved state
+            const savedState = loadTaskState();
+            let revealedCount = savedState.revealed.length;
             
             tasksGrid.innerHTML = '';
             
             todaysTasks.forEach((task, index) => {
                 const button = document.createElement('button');
                 button.className = 'task-button';
-                button.innerHTML = `
-                    <span class="button-number">${index + 1}</span>
-                    <span class="button-text">Click to reveal</span>
-                `;
+                
+                // Check if this button was previously revealed
+                if (savedState.revealed && savedState.revealed.includes(index)) {
+                    button.classList.add('revealed');
+                    const isCompleted = savedState.completed && savedState.completed.includes(index);
+                    if (isCompleted) {
+                        button.classList.add('completed');
+                    }
+                    button.innerHTML = `
+                        <div class="task-content">
+                            <input type="checkbox" class="task-checkbox" ${isCompleted ? 'checked' : ''}>
+                            <span class="task-text">${task}</span>
+                        </div>
+                    `;
+                    
+                    // Add checkbox event listener for previously revealed tasks
+                    const checkbox = button.querySelector('.task-checkbox');
+                    checkbox.addEventListener('change', function() {
+                        const button = this.closest('.task-button');
+                        const buttonIndex = Array.from(button.parentNode.children).indexOf(button);
+                        const currentState = loadTaskState();
+                        
+                        if (this.checked) {
+                            button.classList.add('completed');
+                            const newCompleted = [...(currentState.completed || []), buttonIndex];
+                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                        } else {
+                            button.classList.remove('completed');
+                            const newCompleted = (currentState.completed || []).filter(i => i !== buttonIndex);
+                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                        }
+                    });
+                }
+                // Check if this button was previously disabled
+                else if (savedState.disabled && savedState.disabled.includes(index)) {
+                    button.classList.add('disabled');
+                    button.innerHTML = `
+                        <div class="button-content">
+                            <span class="button-number">${index + 1}</span>
+                            <span class="button-text">Daily limit reached</span>
+                        </div>
+                    `;
+                }
+                // Normal state
+                else {
+                    button.innerHTML = `
+                        <div class="button-content">
+                            <span class="button-number">${index + 1}</span>
+                            <span class="button-text">Click to reveal</span>
+                        </div>
+                    `;
+                }
                 
                 button.addEventListener('click', function() {
-                    if (this.classList.contains('revealed')) {
-                        return; // Already revealed
+                    if (this.classList.contains('revealed') || this.classList.contains('disabled')) {
+                        return; // Already revealed or disabled
                     }
                     
                     this.classList.add('revealed');
                     this.innerHTML = `
-                        <span class="task-text">${task}</span>
+                        <div class="task-content">
+                            <input type="checkbox" class="task-checkbox">
+                            <span class="task-text">${task}</span>
+                        </div>
                     `;
+                    
+                    revealedCount++;
+                    
+                    // Get current state and update it
+                    const currentState = loadTaskState();
+                    const newRevealed = [...currentState.revealed, index];
+                    saveTaskState(newRevealed, currentState.disabled, currentState.completed);
+                    
+                    // Add checkbox event listener
+                    const checkbox = this.querySelector('.task-checkbox');
+                    checkbox.addEventListener('change', function() {
+                        const button = this.closest('.task-button');
+                        const buttonIndex = Array.from(button.parentNode.children).indexOf(button);
+                        const currentState = loadTaskState();
+                        
+                        if (this.checked) {
+                            button.classList.add('completed');
+                            const newCompleted = [...(currentState.completed || []), buttonIndex];
+                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                        } else {
+                            button.classList.remove('completed');
+                            const newCompleted = (currentState.completed || []).filter(i => i !== buttonIndex);
+                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                        }
+                    });
+                    
+                    // If we've reached the limit, disable all remaining buttons
+                    if (revealedCount >= maxRevealed) {
+                        const allButtons = document.querySelectorAll('.task-button');
+                        const newDisabled = [...(currentState.disabled || [])];
+                        
+                        allButtons.forEach((btn, btnIndex) => {
+                            if (!btn.classList.contains('revealed')) {
+                                btn.classList.add('disabled');
+                                btn.innerHTML = `
+                                    <div class="button-content">
+                                        <span class="button-number">${btnIndex + 1}</span>
+                                        <span class="button-text">Daily limit reached</span>
+                                    </div>
+                                `;
+                                newDisabled.push(btnIndex);
+                            }
+                        });
+                        
+                        // Save the disabled state
+                        saveTaskState(newRevealed, newDisabled, currentState.completed);
+                    }
                 });
-            
+                
                 tasksGrid.appendChild(button);
             });
         }
@@ -196,33 +297,60 @@
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            
+            // Clean up old localStorage entries
+            cleanupOldStorage();
+            
+            // Get all tasks from the imported data file
+            try {
+                allTasks = getAllTasks();
+                console.log('allTasks length:', allTasks ? allTasks.length : 'undefined');
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                document.getElementById('tasksGrid').innerHTML = '<p style="color: red;">Error: Tasks not loaded. Please refresh the page.</p>';
+                return;
+            }
+            
+            if (!allTasks || allTasks.length === 0) {
+                console.error('No tasks loaded! Check if tasks-data.js is properly loaded.');
+                document.getElementById('tasksGrid').innerHTML = '<p style="color: red;">Error: Tasks not loaded. Please refresh the page.</p>';
+                return;
+            }
+            
             createTaskButtons();
             updateDateDisplay();
             
             // Custom cursor functionality (same as main page)
             const cursor = document.querySelector('.custom-cursor');
-            let mouseX = 0;
-            let mouseY = 0;
+            if (cursor) {
+                let mouseX = 0;
+                let mouseY = 0;
 
-            document.addEventListener('mousemove', function(e) {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
+                document.addEventListener('mousemove', function(e) {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
 
-            function updateCursor() {
-                cursor.style.left = (mouseX - 30) + 'px';
-                cursor.style.top = (mouseY - 30) + 'px';
-                requestAnimationFrame(updateCursor);
+                function updateCursor() {
+                    if (cursor) {
+                        cursor.style.left = (mouseX - 30) + 'px';
+                        cursor.style.top = (mouseY - 30) + 'px';
+                        requestAnimationFrame(updateCursor);
+                    }
+                }
+                updateCursor();
+
+                document.addEventListener('mouseleave', function() {
+                    if (cursor) cursor.style.opacity = '0';
+                });
+                
+                document.addEventListener('mouseenter', function() {
+                    if (cursor) cursor.style.opacity = '1';
+                });
+            } else {
+                console.warn('Custom cursor element not found');
             }
-            updateCursor();
-
-            document.addEventListener('mouseleave', function() {
-                cursor.style.opacity = '0';
-            });
-            
-            document.addEventListener('mouseenter', function() {
-                cursor.style.opacity = '1';
-            });
         });
     </script>
 </body>
