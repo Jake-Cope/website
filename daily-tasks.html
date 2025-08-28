@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Daily Tasks - Jake Cope</title>
+    <title>Micro Steps</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="daily-tasks.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="custom-cursor">
-        <div class="cursor-star"></div>
-    </div>
-
     <nav class="nav-back">
         <a href="index.html" class="btn btn-back">← Back to Portfolio</a>
     </nav>
@@ -20,9 +17,9 @@
     <section class="daily-tasks">
         <div class="container">
             <div class="tasks-content">
-                <h1 class="tasks-title">Daily Tasks</h1>
+                <h1 class="tasks-title">Micro Steps</h1>
+                <p class="tasks-subtitle">Don't be a loser today. Take micro-steps, build momentum, achieve something!</p>
                 <p class="tasks-subtitle">Click the buttons to reveal today's tasks</p>
-                
                 <div class="tasks-grid" id="tasksGrid">
                     <!-- Task buttons will be generated here -->
                 </div>
@@ -321,36 +318,6 @@
             createTaskButtons();
             updateDateDisplay();
             
-            // Custom cursor functionality (same as main page)
-            const cursor = document.querySelector('.custom-cursor');
-            if (cursor) {
-                let mouseX = 0;
-                let mouseY = 0;
-
-                document.addEventListener('mousemove', function(e) {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
-
-                function updateCursor() {
-                    if (cursor) {
-                        cursor.style.left = (mouseX - 30) + 'px';
-                        cursor.style.top = (mouseY - 30) + 'px';
-                        requestAnimationFrame(updateCursor);
-                    }
-                }
-                updateCursor();
-
-                document.addEventListener('mouseleave', function() {
-                    if (cursor) cursor.style.opacity = '0';
-                });
-                
-                document.addEventListener('mouseenter', function() {
-                    if (cursor) cursor.style.opacity = '1';
-                });
-            } else {
-                console.warn('Custom cursor element not found');
-            }
         });
     </script>
 </body>
