@@ -26,6 +26,16 @@
 
                 <div class="date-info">
                     <p>Tasks for: <span id="currentDate"></span></p>
+                    <div class="counters">
+                        <div class="counter">
+                            <span class="counter-label">Tasks Previously Completed:</span>
+                            <span class="counter-value" id="yesterdayCompleted">0</span>
+                        </div>
+                        <div class="counter">
+                            <span class="counter-label">Tasks Previously Missed:</span>
+                            <span class="counter-value" id="yesterdayIncomplete">0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,22 +73,64 @@
             return shuffled;
         }
 
-        // Function to get today's tasks
+        // Function to get today's tasks ensuring no duplicate categories
         function getTodaysTasks() {
             const seed = getDailySeed();
             const shuffled = seededShuffle(allTasks, seed);
-            return shuffled.slice(0, 6);
+            
+            const selectedTasks = [];
+            const usedCategories = new Set();
+            
+            // Get the total number of available categories
+            const totalCategories = new Set();
+            for (const task of shuffled) {
+                const category = task.split(': ')[0];
+                totalCategories.add(category);
+            }
+            const maxTasks = Math.min(6, totalCategories.size); // Cap at 6 tasks max
+            
+            for (const task of shuffled) {
+                // Extract category from task (format: "Category: Task description")
+                const category = task.split(': ')[0];
+                
+                // Only add task if we haven't used this category yet
+                if (!usedCategories.has(category)) {
+                    selectedTasks.push(task);
+                    usedCategories.add(category);
+                    
+                    // Stop when we have one task from each category (or max 6)
+                    if (selectedTasks.length >= maxTasks) {
+                        break;
+                    }
+                }
+            }
+            
+            // If we have fewer categories than 6, we might want to add some random tasks
+            // to fill up to 6 slots (optional - you can remove this if you prefer)
+            if (selectedTasks.length < 6 && shuffled.length > selectedTasks.length) {
+                const remainingTasks = shuffled.filter(task => !selectedTasks.includes(task));
+                const additionalTasks = remainingTasks.slice(0, 6 - selectedTasks.length);
+                selectedTasks.push(...additionalTasks);
+            }
+            
+            return selectedTasks;
         }
 
-                // Function to get storage key for today's date
-        function getStorageKey() {
-            const today = new Date();
-            return `dailyTasks_${today.toDateString()}`;
+                // Function to get storage key for a specific date
+        function getStorageKey(date) {
+            return `dailyTasks_${date.toDateString()}`;
+        }
+
+        // Function to get yesterday's date
+        function getYesterdayDate() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return yesterday;
         }
 
         // Function to save task state to local storage
         function saveTaskState(revealedIndices, disabledIndices, completedIndices = []) {
-            const storageKey = getStorageKey();
+            const storageKey = getStorageKey(new Date());
             const state = {
                 revealed: revealedIndices,
                 disabled: disabledIndices,
@@ -120,7 +172,7 @@
 
         // Function to load task state from local storage
         function loadTaskState() {
-            const storageKey = getStorageKey();
+            const storageKey = getStorageKey(new Date());
             const saved = localStorage.getItem(storageKey);
             if (saved) {
                 try {
@@ -279,6 +331,42 @@
             });
         }
 
+        // Function to calculate and display cumulative stats from all previous days
+        function updateCumulativeCounters() {
+            let totalCompleted = 0;
+            let totalIncomplete = 0;
+            
+            // Get today's date for comparison
+            const today = new Date();
+            const todayString = today.toDateString();
+            
+            // Scan all localStorage entries for daily tasks
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('dailyTasks_')) {
+                    try {
+                        const saved = localStorage.getItem(key);
+                        if (saved) {
+                            const state = JSON.parse(saved);
+                            
+                            // Only count entries from previous days (not today)
+                            if (state.date && state.date !== todayString) {
+                                if (state.revealed && state.completed) {
+                                    totalCompleted += state.completed.length;
+                                    totalIncomplete += (state.revealed.length - state.completed.length);
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error parsing storage entry:', e);
+                    }
+                }
+            }
+            
+            document.getElementById('yesterdayCompleted').textContent = totalCompleted;
+            document.getElementById('yesterdayIncomplete').textContent = totalIncomplete;
+        }
+
         // Function to update current date display
         function updateDateDisplay() {
             const dateElement = document.getElementById('currentDate');
@@ -317,6 +405,7 @@
             
             createTaskButtons();
             updateDateDisplay();
+            updateCumulativeCounters();
             
         });
     </script>

@@ -218,6 +218,32 @@ body {
     font-weight: 400;
 }
 
+.counters {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.counter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.counter-label {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.counter-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
 #currentDate {
     font-weight: 600;
     color: var(--color-text-primary);
