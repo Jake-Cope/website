@@ -246,15 +246,10 @@
                         }
                     });
                 }
-                // Check if this button was previously disabled
+                // Check if this button was previously disabled (shouldn't happen with new logic)
                 else if (savedState.disabled && savedState.disabled.includes(index)) {
-                    button.classList.add('disabled');
-                    button.innerHTML = `
-                        <div class="button-content">
-                            <span class="button-number">${index + 1}</span>
-                            <span class="button-text">Daily limit reached</span>
-                        </div>
-                    `;
+                    // Don't create the button at all - it should be hidden
+                    return;
                 }
                 // Normal state
                 else {
@@ -304,20 +299,15 @@
                         }
                     });
                     
-                    // If we've reached the limit, disable all remaining buttons
+                    // If we've reached the limit, hide all remaining buttons
                     if (revealedCount >= maxRevealed) {
                         const allButtons = document.querySelectorAll('.task-button');
                         const newDisabled = [...(currentState.disabled || [])];
                         
                         allButtons.forEach((btn, btnIndex) => {
                             if (!btn.classList.contains('revealed')) {
-                                btn.classList.add('disabled');
-                                btn.innerHTML = `
-                                    <div class="button-content">
-                                        <span class="button-number">${btnIndex + 1}</span>
-                                        <span class="button-text">Daily limit reached</span>
-                                    </div>
-                                `;
+                                // Hide the button instead of disabling it
+                                btn.style.display = 'none';
                                 newDisabled.push(btnIndex);
                             }
                         });
