@@ -25,11 +25,18 @@
                 </div>
                 <p class="hero-subtitle">Creative & Graphic Designer</p>
                 <div class="hero-buttons">
-                    <a href="files/portfolio.pdf" target="_blank" class="btn btn-primary">portfolio</a>
-                    <a href="files/cv.pdf" target="_blank" class="btn btn-primary">cv</a>
-                    <a href="mailto:j_a_cope@hotmail.com" class="btn btn-primary">get in touch</a>
+                    <a href="files/portfolio.pdf" target="_blank" class="btn btn-primary" id="portfolio-btn">portfolio</a>
+                    <a href="files/cv.pdf" target="_blank" class="btn btn-primary" id="cv-btn">cv</a>
+                    <!-- <a href="mailto:j_a_cope@hotmail.com" class="btn btn-primary">get in touch</a> -->
                 </div>
             </div>
+            <!-- <div class="dark-mode-toggle">
+                <label class="checkbox-label">
+                    DO NOT click this →
+                    <input type="checkbox" id="dark-mode-checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div> -->
         </div>
     </section>
 
@@ -86,6 +93,28 @@
 
             heroIcon.addEventListener('touchend', function() {
                 clearInterval(cycleInterval);
+            });
+
+            // Dark mode functionality
+            const darkModeCheckbox = document.getElementById('dark-mode-checkbox');
+            const portfolioBtn = document.getElementById('portfolio-btn');
+            const cvBtn = document.getElementById('cv-btn');
+            const body = document.body;
+
+            darkModeCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    body.classList.add('dark-mode');
+                    portfolioBtn.textContent = 'evil portfolio';
+                    portfolioBtn.href = 'files/portfolio-evil.pdf';
+                    cvBtn.textContent = 'evil cv';
+                    cvBtn.href = 'files/cv-evil.pdf';
+                } else {
+                    body.classList.remove('dark-mode');
+                    portfolioBtn.textContent = 'portfolio';
+                    portfolioBtn.href = 'files/portfolio.pdf';
+                    cvBtn.textContent = 'cv';
+                    cvBtn.href = 'files/cv.pdf';
+                }
             });
         });
     </script>

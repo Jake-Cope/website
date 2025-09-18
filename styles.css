@@ -3,6 +3,9 @@
     --color-text-secondary: #555;
     --color-svg-shadow: rgba(0, 0, 0, 0.1);
     --color-svg-shadow-hover: rgba(0, 0, 0, 0.15);
+    --color-bg: #ffffff;
+    --color-text-inverted: #ffffff;
+    --color-bg-inverted: #000000;
 }
 
 * {
@@ -20,7 +23,9 @@ html, body {
 body {
     font-family: 'Inter', sans-serif;
     color: var(--color-text-primary);
+    background-color: var(--color-bg);
     cursor: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -56,6 +61,7 @@ body {
     height: 100vh;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .hero-content {
@@ -235,4 +241,107 @@ body {
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
     }
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: var(--color-bg-inverted);
+    color: var(--color-text-inverted);
+}
+
+body.dark-mode .hero-subtitle {
+    color: var(--color-text-inverted);
+}
+
+body.dark-mode .btn {
+    color: var(--color-text-inverted);
+}
+
+body.dark-mode .btn::after {
+    background: #ff0000;
+}
+
+body.dark-mode .hero-svg {
+    filter: invert(1);
+}
+
+body.dark-mode .cursor-star::before {
+    filter: invert(1);
+}
+
+/* Checkbox styling */
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 1s ease 1.5s forwards;
+    opacity: 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .checkbox-label {
+    color: var(--color-text-inverted);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-text-secondary);
+    border-radius: 3px;
+    margin-left: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .checkmark {
+    border-color: #ff0000;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background-color: var(--color-text-secondary);
+    border-color: var(--color-text-secondary);
+}
+
+body.dark-mode .checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background-color: #ff0000;
+    border-color: #ff0000;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--color-bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+body.dark-mode .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    border-color: var(--color-bg-inverted);
+}
+
+.checkbox-label:hover .checkmark {
+    border-color: var(--color-text-primary);
+}
+
+body.dark-mode .checkbox-label:hover .checkmark {
+    border-color: #ff0000;
 }

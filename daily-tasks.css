@@ -112,11 +112,11 @@ body {
     transform: translateY(-2px);
 }
 
-.task-button.revealed {
+/* .task-button.revealed {
     background: rgba(244, 67, 54, 0.1);
     border-color: rgba(244, 67, 54, 0.3);
     cursor: default;
-}
+} */
 
 .task-button.revealed:hover {
     transform: none;
