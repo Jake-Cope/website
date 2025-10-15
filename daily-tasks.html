@@ -18,8 +18,8 @@
         <div class="container">
             <div class="tasks-content">
                 <h1 class="tasks-title">Micro Steps</h1>
-                <p class="tasks-subtitle">Don't be a loser today. Take micro-steps, build momentum, achieve something!</p>
-                <p class="tasks-subtitle">Click the buttons to reveal today's tasks</p>
+                <p class="tasks-subtitle">Stop wasting days. Take micro-steps, build momentum, achieve something!</p>
+                <p class="tasks-subtitle" id="instructionText">Click the buttons to reveal today's tasks</p>
                 <div class="tasks-grid" id="tasksGrid">
                     <!-- Task buttons will be generated here -->
                 </div>
@@ -236,9 +236,17 @@
                         const currentState = loadTaskState();
                         
                         if (this.checked) {
-                            button.classList.add('completed');
-                            const newCompleted = [...(currentState.completed || []), buttonIndex];
-                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                            // Show confirmation prompt
+                            const confirmed = confirm(getRandomConfirmationMessage());
+                            
+                            if (confirmed) {
+                                button.classList.add('completed');
+                                const newCompleted = [...(currentState.completed || []), buttonIndex];
+                                saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                            } else {
+                                // Uncheck the checkbox if user says no
+                                this.checked = false;
+                            }
                         } else {
                             button.classList.remove('completed');
                             const newCompleted = (currentState.completed || []).filter(i => i !== buttonIndex);
@@ -281,6 +289,11 @@
                     const newRevealed = [...currentState.revealed, index];
                     saveTaskState(newRevealed, currentState.disabled, currentState.completed);
                     
+                    // Update instruction text if this is the final task being revealed (3rd task)
+                    if (currentState.revealed.length === 2) {
+                        updateInstructionText();
+                    }
+                    
                     // Add checkbox event listener
                     const checkbox = this.querySelector('.task-checkbox');
                     checkbox.addEventListener('change', function() {
@@ -289,9 +302,17 @@
                         const currentState = loadTaskState();
                         
                         if (this.checked) {
-                            button.classList.add('completed');
-                            const newCompleted = [...(currentState.completed || []), buttonIndex];
-                            saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                            // Show confirmation prompt
+                            const confirmed = confirm(getRandomConfirmationMessage());
+                            
+                            if (confirmed) {
+                                button.classList.add('completed');
+                                const newCompleted = [...(currentState.completed || []), buttonIndex];
+                                saveTaskState(currentState.revealed, currentState.disabled, newCompleted);
+                            } else {
+                                // Uncheck the checkbox if user says no
+                                this.checked = false;
+                            }
                         } else {
                             button.classList.remove('completed');
                             const newCompleted = (currentState.completed || []).filter(i => i !== buttonIndex);
@@ -374,6 +395,39 @@
             dateElement.textContent = today.toLocaleDateString('en-US', options);
         }
 
+        // Function to update instruction text when tasks are revealed
+        function updateInstructionText() {
+            const instructionElement = document.getElementById('instructionText');
+            const currentState = loadTaskState();
+            
+            if (currentState.revealed && currentState.revealed.length > 0) {
+                // Fade out current text
+                instructionElement.style.opacity = '0';
+                
+                // After fade out, change text and fade in
+                setTimeout(() => {
+                    instructionElement.innerHTML = `
+                        <div class="motivational-content">
+                            <h2 class="motivational-title">These are your day's tasks</h2>
+                            <p class="motivational-text">Don't overthink. Just do them - even if they're dull or uncomfortable. Need a hand? Ask AI for tips. Then get moving!</p>
+                        </div>
+                    `;
+                    instructionElement.style.opacity = '1';
+                }, 500);
+            }
+        }
+
+        // Function to get random confirmation message
+        function getRandomConfirmationMessage() {
+            const messages = [
+                "Just checking - did you actually complete this task, or are you just clicking it? If you have done this task, good job! Click ok and be satisifed with yourself :)",
+                "Be honest: Is this done, or are you just in a ticking mood? If you are being honest, that's great and well done - onto the next one!",
+                "Great! But just double-checking - is this task fully done? All of it? If it is, click ok and be proud!"
+            ];
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            return messages[randomIndex];
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded');
@@ -406,6 +460,11 @@
             if (savedState.revealed && savedState.revealed.length >= 3) {
                 const tasksGrid = document.getElementById('tasksGrid');
                 tasksGrid.classList.add('single-column');
+            }
+            
+            // Update instruction text if all 3 tasks are already revealed
+            if (savedState.revealed && savedState.revealed.length >= 3) {
+                updateInstructionText();
             }
             
         });

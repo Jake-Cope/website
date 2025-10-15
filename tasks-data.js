@@ -1,53 +1,54 @@
 // Task categories and their respective tasks
 const taskCategories = {
     "Job-Hunting / Career": [
-        "Spend 30 minutes checking and updating your CV",
-        "Spend 30 minutes looking for job adverts online and apply to 3 (even if it doesn't sound perfect! you can always abandon it later)",
-        "Open your CV and update one section",
-        "Draft one sentence for a cover letter",
-        "Spend 30 minutes improving one project representation in your portfolio",
-        "Research one new skill that could help your career",
-        "Update your LinkedIn headline or profile section",
-        "Review your website and think of one thing to improve",
-        "Make up a project to go in your portfolio (Dog and Bike, Pupcicles, etc)"
+        "Update your CV for 30 minutes. No excuses.",
+        "Spend 30 minutes searching job ads. Apply to 3 - even if they’re not perfect.",
+        "Open your CV. Improve just one section.",
+        "Write one sentence for a cover letter. That’s it.",
+        "Improve one project representation in your portfolio for 30 minutes.",
+        "Update your LinkedIn headline or profile section.",
+        "Review your portfolio website and think of one thing to improve.",
+        "Work up a project to go in your portfolio (Dog and Bike, Pupcicles, etc)."
     ],
 
     "Personal Projects": [
-        "Spend 1 hour on David's mural",
-        "Spend 1 hour on art for your family",
-        "Spend 30 minutes working on Kinship (read blog post, review idea, design brand...)"
+        "Spend 1 hour on David's mural.",
+        "Spend 1 hour on art for your family.",
+        "Spend 30 minutes on Kinship (read the blog, sketch the brand, rethink the idea… just engage)."
     ],
 
     "Hobbies": [
-        "Go for a skate and do three ollies and three 180s",
-        "Go skating and complete the warmup",
-        "Go skating and try a kickflip 10 times as good as you can",
-        "Finish painting a warhammer model or squad",
-        "Paint a single piece of warhammer scenery",
-        "Clean and service your bike"
+        "Go skate. Land 3 ollies and 3 180s.",
+        "Do your full skating warm-up. No skipping steps.",
+        "Try 10 kickflips. Actually commit.",
+        "Finish off painting an unfinished warhammer model or squad.",
+        "Start painting a new warhammer model.",
+        "Paint one piece of warhammer scenery.",
+        "Clean and service your bike—chain, tyres, the lot.",
+        "Start or continue reading a book or magazine, for 30 minutes."
     ],
 
     "Fitness & Health": [
-        "Hang for at least one minute",
-        "Go for a 15–20 minute walk or jog in the park",
-        "Prepare one healthy meal for the day",
-        "Drink two to three glasses of water",
-        "Actively avoid having a cigarette for an hour",
-        "Practice deep breathing for five minutes",
-        "Avoid reddit for a 2 hour period today",
-        "Plan your meals for the next day",
+        "Hang for at least one minute - and update the sheet with your time!",
+        "Go for a 30 minute walk or jog in the park. And no looking at your phone!",
+        "Cook one healthy meal today. Eat it mindfully.",
+        "Drink two to three pint glasses of water today.",
+        "Resist a cigarette for one hour.. or two? You can handle that.",
+        "Do 5 minutes of slow, deep breathing. Reset your system.",
+        "Stay off Reddit for a 2 hour period today. Set a timer and go.",
+        "Plan tomorrow’s meals. Basic ideas will do, not full recipes. But follow through with it tomorrow!",
     ],
 
     "Make your house nice": [
-        "Wash up all the dishes and put away",
-        "Clean the living area",
-        "Put up a piece of art, or rotate the art that is up",
-        "Water the plants and/or clean their pots and leaves",
-        "Put your clutter away",
-        "Spend 30 minutes organising your warhammer",
-        "Make one change to your flat to improve it",
-        "Clean one part of your bathroom (toilet, shower, mirror, floor etc)",
-        "Throw away one piece of rubbish from your garden"
+        "Do all the dishes. Dry and put them away.",
+        "Tidy and clean your living space. Make it feel fresh.",
+        "Hang up a piece of art - or swap one out for variety.",
+        "Water your plants. Wipe dust off their leaves and pots.",
+        "Put your clutter away. One flat surface at a time.",
+        "Spend 30 minutes organising your warhammer.",
+        "Make one visible improvement to your flat.",
+        "Clean one bathroom area (shower, toilet, mirror etc).",
+        "Pick up and bin one piece of rubbish from the garden."
     ],
 
     "Be a Better Partner": [
@@ -56,7 +57,7 @@ const taskCategories = {
         "Reflect on one thing you appreciate about your partner",
         "Ask your partner about their day and listen attentively",
         "Cook or prepare a meal together",
-        "Think deeply about one thing your partner wants and how you can help make it happen"
+        "Think of something they want - then plan how to support it."
     ],
 };
 
