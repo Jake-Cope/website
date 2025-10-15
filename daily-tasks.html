@@ -26,7 +26,7 @@
 
                 <div class="date-info">
                     <p>Tasks for: <span id="currentDate"></span></p>
-                    <div class="counters">
+                    <!-- <div class="counters">
                         <div class="counter">
                             <span class="counter-label">Tasks Previously Completed:</span>
                             <span class="counter-value" id="yesterdayCompleted">0</span>
@@ -35,7 +35,7 @@
                             <span class="counter-label">Tasks Previously Missed:</span>
                             <span class="counter-value" id="yesterdayIncomplete">0</span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -299,7 +299,7 @@
                         }
                     });
                     
-                    // If we've reached the limit, hide all remaining buttons
+                    // If we've reached the limit, hide all remaining buttons and switch to single column
                     if (revealedCount >= maxRevealed) {
                         const allButtons = document.querySelectorAll('.task-button');
                         const newDisabled = [...(currentState.disabled || [])];
@@ -311,6 +311,10 @@
                                 newDisabled.push(btnIndex);
                             }
                         });
+                        
+                        // Switch to single column layout
+                        const tasksGrid = document.getElementById('tasksGrid');
+                        tasksGrid.classList.add('single-column');
                         
                         // Save the disabled state
                         saveTaskState(newRevealed, newDisabled, currentState.completed);
@@ -395,7 +399,14 @@
             
             createTaskButtons();
             updateDateDisplay();
-            updateCumulativeCounters();
+            // updateCumulativeCounters(); // Commented out until backend is implemented
+            
+            // Check if we should apply single column layout on page load
+            const savedState = loadTaskState();
+            if (savedState.revealed && savedState.revealed.length >= 3) {
+                const tasksGrid = document.getElementById('tasksGrid');
+                tasksGrid.classList.add('single-column');
+            }
             
         });
     </script>

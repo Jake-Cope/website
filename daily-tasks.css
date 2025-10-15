@@ -80,6 +80,13 @@ body {
     margin-right: auto;
 }
 
+/* Single column layout when only 3 tasks are visible */
+.tasks-grid.single-column {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    justify-items: center;
+}
+
 .task-button {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
