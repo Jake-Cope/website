@@ -26,6 +26,7 @@
 
                 <div class="date-info">
                     <p>Tasks for: <span id="currentDate"></span></p>
+                    <button id="showTaskListBtn" class="show-task-list-btn">Show Task List</button>
                     <!-- <div class="counters">
                         <div class="counter">
                             <span class="counter-label">Tasks Previously Completed:</span>
@@ -40,6 +41,19 @@
             </div>
         </div>
     </section>
+
+    <!-- Task List Popup Modal -->
+    <div id="taskListModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Complete Task List</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="taskListContent">
+                <!-- Task categories will be populated here -->
+            </div>
+        </div>
+    </div>
 
     <script src="tasks-data.js"></script>
     <script>
@@ -428,6 +442,48 @@
             return messages[randomIndex];
         }
 
+        // Function to populate and show the task list modal
+        function showTaskListModal() {
+            const modal = document.getElementById('taskListModal');
+            const content = document.getElementById('taskListContent');
+            
+            // Clear previous content
+            content.innerHTML = '';
+            
+            // Get task categories from the global taskCategories object
+            for (const [category, tasks] of Object.entries(taskCategories)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'task-category';
+                
+                const categoryTitle = document.createElement('h3');
+                categoryTitle.className = 'category-title';
+                categoryTitle.textContent = category;
+                categoryDiv.appendChild(categoryTitle);
+                
+                const taskList = document.createElement('ul');
+                taskList.className = 'task-list';
+                
+                tasks.forEach(task => {
+                    const taskItem = document.createElement('li');
+                    taskItem.className = 'task-item';
+                    taskItem.textContent = task;
+                    taskList.appendChild(taskItem);
+                });
+                
+                categoryDiv.appendChild(taskList);
+                content.appendChild(categoryDiv);
+            }
+            
+            // Show the modal
+            modal.style.display = 'block';
+        }
+
+        // Function to hide the task list modal
+        function hideTaskListModal() {
+            const modal = document.getElementById('taskListModal');
+            modal.style.display = 'none';
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded');
@@ -466,6 +522,28 @@
             if (savedState.revealed && savedState.revealed.length >= 3) {
                 updateInstructionText();
             }
+            
+            // Add event listeners for the task list modal
+            const showTaskListBtn = document.getElementById('showTaskListBtn');
+            const modal = document.getElementById('taskListModal');
+            const closeBtn = document.querySelector('.close');
+            
+            showTaskListBtn.addEventListener('click', showTaskListModal);
+            closeBtn.addEventListener('click', hideTaskListModal);
+            
+            // Close modal when clicking outside of it
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    hideTaskListModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    hideTaskListModal();
+                }
+            });
             
         });
     </script>

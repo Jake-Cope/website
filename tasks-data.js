@@ -4,8 +4,8 @@ const taskCategories = {
         "Update your CV for 30 minutes. No excuses.",
         "Spend 30 minutes searching job ads. Apply to 3 - even if they’re not perfect.",
         "Open your CV. Improve just one section.",
-        "Write one sentence for a cover letter. That’s it.",
-        "Improve one project representation in your portfolio for 30 minutes.",
+        "Write one sentence for a cover letter. That’s it. But make it good!",
+        "Spend 30 minutes improving one project representation in your portfolio.",
         "Update your LinkedIn headline or profile section.",
         "Review your portfolio website and think of one thing to improve.",
         "Work up a project to go in your portfolio (Dog and Bike, Pupcicles, etc)."
