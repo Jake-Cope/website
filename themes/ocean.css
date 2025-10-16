@@ -1,0 +1,23 @@
+/* Ocean Theme */
+:root {
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #E6F7FF;
+    --color-svg-shadow: rgba(255, 255, 255, 0.2);
+    --color-svg-shadow-hover: rgba(255, 255, 255, 0.3);
+    --color-bg: linear-gradient(135deg, #337561 0%, #2a967b 25%, #667eea 50%, #4facfe 75%, #00f2fe 100%);
+    --color-text-inverted: #0A2E38;
+    --color-bg-inverted: #F0F8FF;
+}
+
+body {
+    background: var(--color-bg);
+    background-attachment: fixed;
+    background-size: 400% 400%;
+    animation: gradientShift 60s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}

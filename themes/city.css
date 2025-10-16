@@ -1,0 +1,24 @@
+/* City Theme */
+:root {
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #F5F5F5;
+    --color-svg-shadow: rgba(255, 255, 255, 0.2);
+    --color-svg-shadow-hover: rgba(255, 255, 255, 0.3);
+    --color-bg: linear-gradient(135deg, #2C3E50 0%, #485e74 25%, #718396 50%, #7F8C8D 75%, #95A5A6 100%);
+    --color-text-inverted: #1A1A1A;
+    --color-bg-inverted: #F5F5F5;
+}
+
+body {
+    background: var(--color-bg);
+    background-attachment: fixed;
+    background-size: 400% 400%;
+    animation: gradientShift 60s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+

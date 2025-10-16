@@ -14,6 +14,17 @@
         <a href="index.html" class="btn btn-back">← Back to Portfolio</a>
     </nav>
 
+    <div class="theme-selector">
+        <select id="themeSelect" class="theme-dropdown">
+            <option value="default">Default</option>
+            <option value="sunset">Sunset</option>
+            <option value="ocean">Ocean</option>
+            <option value="forest">Forest</option>
+            <option value="cliff">Cliff</option>
+            <option value="city">City</option>
+        </select>
+    </div>
+
     <section class="daily-tasks">
         <div class="container">
             <div class="tasks-content">
@@ -47,7 +58,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Complete Task List</h2>
-                <span class="close">&times;</span>
+                <div class="modal-header-buttons">
+                    <button id="editTasksBtn" class="edit-tasks-btn">Edit</button>
+                    <span class="close">&times;</span>
+                </div>
             </div>
             <div class="modal-body" id="taskListContent">
                 <!-- Task categories will be populated here -->
@@ -235,10 +249,15 @@
                     if (isCompleted) {
                         button.classList.add('completed');
                     }
+                    // Split task into category and description
+                    const taskParts = task.split(': ');
+                    const category = taskParts[0];
+                    const description = taskParts.slice(1).join(': ');
+                    
                     button.innerHTML = `
                         <div class="task-content">
                             <input type="checkbox" class="task-checkbox" ${isCompleted ? 'checked' : ''}>
-                            <span class="task-text">${task}</span>
+                            <span class="task-text"><strong>${category}:</strong> ${description}</span>
                         </div>
                     `;
                     
@@ -289,10 +308,16 @@
                     }
                     
                     this.classList.add('revealed');
+                    
+                    // Split task into category and description
+                    const taskParts = task.split(': ');
+                    const category = taskParts[0];
+                    const description = taskParts.slice(1).join(': ');
+                    
                     this.innerHTML = `
                         <div class="task-content">
                             <input type="checkbox" class="task-checkbox">
-                            <span class="task-text">${task}</span>
+                            <span class="task-text"><strong>${category}:</strong> ${description}</span>
                         </div>
                     `;
                     
@@ -423,7 +448,7 @@
                     instructionElement.innerHTML = `
                         <div class="motivational-content">
                             <h2 class="motivational-title">These are your day's tasks</h2>
-                            <p class="motivational-text">Don't overthink. Just do them - even if they're dull or uncomfortable. Need a hand? Ask AI for tips. Then get moving!</p>
+                            <p class="motivational-text">Don't overthink. Just do them - even if they're dull or uncomfortable. Need a hand? <a href="https://chatgpt.com/"", target="blank">Ask AI for tips.</a> Then get moving!</p>
                         </div>
                     `;
                     instructionElement.style.opacity = '1';
@@ -484,6 +509,43 @@
             modal.style.display = 'none';
         }
 
+        // Function to handle edit tasks button
+        function handleEditTasks() {
+            alert('This is coming soon - for now, WhatsApp me');
+        }
+
+        // Theme switching functionality
+        function loadTheme(themeName) {
+            // Remove existing theme stylesheets
+            const existingTheme = document.querySelector('link[data-theme]');
+            if (existingTheme) {
+                existingTheme.remove();
+            }
+            
+            // Load new theme if not default
+            if (themeName !== 'default') {
+                const themeLink = document.createElement('link');
+                themeLink.rel = 'stylesheet';
+                themeLink.href = `themes/${themeName}.css`;
+                themeLink.setAttribute('data-theme', themeName);
+                document.head.appendChild(themeLink);
+            }
+            
+            // Save theme preference
+            localStorage.setItem('selectedTheme', themeName);
+        }
+
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+            const themeSelect = document.getElementById('themeSelect');
+            
+            // Set the dropdown value
+            themeSelect.value = savedTheme;
+            
+            // Load the theme
+            loadTheme(savedTheme);
+        }
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded');
@@ -527,9 +589,11 @@
             const showTaskListBtn = document.getElementById('showTaskListBtn');
             const modal = document.getElementById('taskListModal');
             const closeBtn = document.querySelector('.close');
+            const editTasksBtn = document.getElementById('editTasksBtn');
             
             showTaskListBtn.addEventListener('click', showTaskListModal);
             closeBtn.addEventListener('click', hideTaskListModal);
+            editTasksBtn.addEventListener('click', handleEditTasks);
             
             // Close modal when clicking outside of it
             modal.addEventListener('click', function(event) {
@@ -543,6 +607,15 @@
                 if (event.key === 'Escape' && modal.style.display === 'block') {
                     hideTaskListModal();
                 }
+            });
+            
+            // Initialize theme
+            initializeTheme();
+            
+            // Add theme selector event listener
+            const themeSelect = document.getElementById('themeSelect');
+            themeSelect.addEventListener('change', function() {
+                loadTheme(this.value);
             });
             
         });
